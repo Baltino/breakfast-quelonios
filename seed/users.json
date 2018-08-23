@@ -1,0 +1,23 @@
+[
+  {
+    "name": "Maxi",
+    "email": "usuario1@gmail.com",
+    "avatar": "lala",
+    "lastBring": "2018-08-22T20:39:29.145Z"
+  }, {
+    "name": "Juancito",
+    "email": "juancitoa@mail.com",
+    "avatar": "unavatar",
+    "lastBring": "2018-08-05T20:39:29.145Z"
+  }, {
+    "name": "Melanie",
+    "email": "melanie@mail.com",
+    "avatar": "unavatar",
+    "lastBring": "2018-08-18T20:39:29.145Z"
+  }, {
+    "name": "Martin",
+    "email": "martin@mail.com",
+    "avatar": "unavatar",
+    "lastBring": "2018-08-13T20:39:29.145Z"
+  }
+]

@@ -1,0 +1,9 @@
+{
+  "aws": {
+    "accessKeyId": "accessKeyId",
+    "secretAccessKey": "secretAccessKey",
+    "region": "region"
+  },
+  "fbIdBehalf": "123456789",
+  "slackWebhook": ""
+}

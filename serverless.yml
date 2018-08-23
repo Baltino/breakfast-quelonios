@@ -1,0 +1,78 @@
+# serverless.yml
+
+service: desayunos
+
+custom:
+  usersTable: 'users-desayunos-table-${self:provider.stage}'
+  serverless-offline:
+    port: 3002
+  dynamodb:
+    start:
+      port: 8000
+      inMemory: true
+      migrate: true
+      seed: true
+      # Uncomment only if you already have a DynamoDB running locally
+      noStart: true
+    seed:
+      domain:
+        sources:
+          - table: ${self:custom.usersTable}
+            sources: [./seed/users.json]
+provider:
+  name: aws
+  runtime: nodejs6.10
+  stage: ${opt:stage, 'dev'}
+  region: us-east-1
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource:
+        - { "Fn::GetAtt": ["UsersDynamoDBTable", "Arn" ] }
+        - arn:aws:dynamodb:us-east-1:155306604514:table/${self:custom.usersTable}/*
+  environment:
+    USERS_TABLE: ${self:custom.usersTable}
+    IS_DEV: 'true'
+
+functions:
+  user:
+    handler: lib/handler.addUser
+    events:
+      - http: 
+          path: users/
+          method: post
+          cors: true
+  send:
+    handler: lib/handler.sendNotifications
+    events:
+      - http: 
+          path: send/
+          method: post
+          cors: true
+          
+resources:
+  Resources:
+    UsersDynamoDBTable:
+      Type: 'AWS::DynamoDB::Table'
+      Properties:
+        TableName: ${self:custom.usersTable}
+        AttributeDefinitions:
+          - AttributeName: email
+            AttributeType: S
+        KeySchema:
+          - AttributeName: email
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        
+plugins:
+  - serverless-dynamodb-local
+  - serverless-offline
+frameworkVersion: ">=1.1.0 <2.0.0"
